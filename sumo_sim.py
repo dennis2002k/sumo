@@ -2,7 +2,7 @@ import traci
 
 # Start SUMO with TraCI
 sumo_binary = "sumo"  # Use "sumo" for non-GUI mode
-sumo_cmd = [sumo_binary, "-c", "analipsews/osm.sumocfg", "--emission-output", "cars.xml"]
+sumo_cmd = [sumo_binary, "-c", "analipsews/osm.sumocfg", "--emission-output", "analipsews/cars.xml"]
 
 traci.start(sumo_cmd)
 

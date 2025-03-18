@@ -2,6 +2,8 @@ import xml.etree.ElementTree as ET
 import networkx as nx
 import matplotlib.pyplot as plt
 import math
+import sys
+import os
 
 def euclidean_distance(x1, y1, x2, y2):
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
@@ -23,14 +25,31 @@ class Link:
         self.car2 = car2
         self.timestep = timestep
 
+def get_max_num_vehicles(config_file):
+    tree = ET.parse(config_file)
+    root = tree.getroot()
+    
+
+    max_vehicles = root.find("max-num-vehicles")
+    if max_vehicles is not None:
+        return int(max_vehicles.get("value"))  # Convert to integer
+    
+    return None  # Return None if not found
+
+
+sumo_folder = sys.argv[1]
 # Parse the XML file
-tree = ET.parse('analipsews/cars.xml')
+tree = ET.parse(f'{sumo_folder}/cars.xml')
 root = tree.getroot()
 links = []
-    # Iterate through the XML elements
+max_vehicles = get_max_num_vehicles(f"{sumo_folder}/osm.sumocfg")
+# Create folder only if it doesn't exist
+os.makedirs(f"cars/cars{max_vehicles}", exist_ok=True)
+
+# Iterate through the XML elements
 for timestep in root.findall('timestep'):
     if (float(timestep.get("time")) <= 100 and float(timestep.get("time")) % 5.00 == 0.00):    
-        with open(f"graphs/graph{timestep.get("time")}.txt", "w") as file, open(f"cars/cars{timestep.get("time")}.txt", "w") as cars:
+        with open(f"graphs/graph{timestep.get("time")}.txt", "w") as file, open(f"cars/cars{max_vehicles}/cars{timestep.get("time")}.txt", "w") as cars:
             vehicles = timestep.findall('vehicle')
             # file.write(f"\nTime: {timestep.get("time")}\n\n")
             for i in range(0, len(vehicles)):
@@ -65,7 +84,7 @@ for timestep in root.findall('timestep'):
 
 for timestep in root.findall('timestep'):
     if (float(timestep.get("time")) <= 100 and float(timestep.get("time")) % 5.00 == 0.00):  
-        with open(f"cars/cars{timestep.get("time")}.txt", "a") as cars:
+        with open(f"cars/cars{max_vehicles}/cars{timestep.get("time")}.txt", "a") as cars:
             cars.write("\n")
             # print("length is :", len(links))
             for link in links:
