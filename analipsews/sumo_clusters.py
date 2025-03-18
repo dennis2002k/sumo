@@ -174,7 +174,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
     highlight_heads(clusters, vehicles, timestep)
     
     if timestep % 5.0 == 0.0:
-        traci.gui.screenshot("View #0", f"screenshot_{timestep}0.png")
+        traci.gui.screenshot("View #0", f"screenshots/screenshot_{timestep}0.png")
 
 
     
