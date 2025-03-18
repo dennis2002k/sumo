@@ -51,7 +51,7 @@ def read_clusters(timestep):
 
 def read_links(timestep):
     links = []
-    with open(f"cars/cars{timestep}0.txt", "r") as file:
+    with open(f"../cars/cars{timestep}0.txt", "r") as file:
             lines = file.readlines()
 
     split_index = lines.index("\n") if "\n" in lines else len(lines)
@@ -169,7 +169,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 traci.vehicle.setColor(f"veh{member}", (cluster.color))
 
     
-    clear_polys()
+    clear_polys() # Erase lines of previous timestep
     draw_links(links, vehicles, timestep)
     highlight_heads(clusters, vehicles, timestep)
     
